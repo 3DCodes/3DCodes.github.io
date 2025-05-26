@@ -1,0 +1,155 @@
+openapi: 3.0.3
+info:
+  title: Debit Card Issuance and Management API
+  version: 1.0.0
+description: >
+  Core API endpoints to support debit card issuance, activation, locking, and transaction lifecycle for a PayTech company.
+
+servers:
+  - url: https://api.paytech.example.com/v1
+
+paths:
+  /cards:
+    post:
+      summary: Issue a new debit card
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_id:
+                  type: string
+                account_id:
+                  type: string
+                card_type:
+                  type: string
+                  enum: [virtual, physical]
+              required: [customer_id, account_id, card_type]
+      responses:
+        '201':
+          description: Card issued successfully
+
+  /cards/{card_id}/activate:
+    post:
+      summary: Activate a debit card
+      parameters:
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Card activated
+
+  /cards/{card_id}/lock:
+    post:
+      summary: Lock a debit card
+      parameters:
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Card locked
+
+  /cards/{card_id}/unlock:
+    post:
+      summary: Unlock a debit card
+      parameters:
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Card unlocked
+
+  /transactions/authorize:
+    post:
+      summary: Authorize a transaction using card
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                card_id:
+                  type: string
+                amount:
+                  type: number
+                  format: float
+                currency:
+                  type: string
+                merchant_id:
+                  type: string
+              required: [card_id, amount, currency, merchant_id]
+      responses:
+        '200':
+          description: Transaction authorized
+
+  /transactions/settle:
+    post:
+      summary: Settle a previously authorized transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                authorization_id:
+                  type: string
+                settlement_amount:
+                  type: number
+                  format: float
+                currency:
+                  type: string
+              required: [authorization_id, settlement_amount, currency]
+      responses:
+        '200':
+          description: Transaction settled
+
+  /ledger/journal-entries:
+    post:
+      summary: Record a financial journal entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reference:
+                  type: string
+                debit_account:
+                  type: string
+                credit_account:
+                  type: string
+                amount:
+                  type: number
+                currency:
+                  type: string
+                description:
+                  type: string
+              required: [reference, debit_account, credit_account, amount, currency]
+      responses:
+        '201':
+          description: Journal entry created
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+
