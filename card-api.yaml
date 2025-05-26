@@ -3,10 +3,10 @@ info:
   title: Debit Card Issuance and Management API
   version: 1.0.0
 description: >
-  Core API endpoints to support debit card issuance, activation, locking, and transaction lifecycle for a PayTech company.
+  Core API endpoints to support debit card issuance, activation, locking, and transaction lifecycle 
 
 servers:
-  - url: https://api.paytech.example.com/v1
+  - url: https://api.frontier-pay.com/v1
 
 paths:
   /cards:
